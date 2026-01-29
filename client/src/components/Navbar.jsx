@@ -38,7 +38,9 @@ const Navbar = () => {
                     <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">3</button>
                 </div>
 
-                {!user ? (<button className="cursor-pointer px-8 py-2 bg-primary-dull hover:bg-primary transition text-white rounded-full">
+                {!user ? (<button onClick={ ()=>{setOpen(false);
+                    setShowUserLogin(true)
+                    }}  className="cursor-pointer px-8 py-2 bg-primary-dull hover:bg-primary transition text-white rounded-full">
                     Login
                 </button>)
                 :(<div className='relative group'>
@@ -70,7 +72,7 @@ const Navbar = () => {
 
                     {!user ?
                     ( <button  onClick={ ()=>{setOpen(false);
-                    setShowUserLogin()
+                    setShowUserLogin(true)
                     }} className="cursor-pointer px-6 py-2 mt-2 bg-primary-dull hover:bg-primary transition text-white rounded-full text-sm">
                     Login
                 </button>) 
