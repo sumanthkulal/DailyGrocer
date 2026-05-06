@@ -2,6 +2,11 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {dummyProducts} from "../assets/assets"
 import toast from "react-hot-toast";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+
 
 export const AppContext = createContext();
 
@@ -17,11 +22,27 @@ export const AppContextProvider = ({ children }) => {
   const [cartItems,setCartItems]=useState({});
   const [searchQuery,setSearchQuery]=useState({})
 
+  const fetchSeller = async () =>{
+      try{
+            const {data} = await axios.get('/api/seller/is-auth');
+            if(data.success)
+            {
+              setIsSeller(true);
+            }
+            else{
+              setIsSeller(false);
+            }
+      }catch{
+              setIsSeller(false);
+      }
+  }
+
   const fetchProducts= async ()=>{
     setProducts(dummyProducts)
   }
 
   useEffect(()=>{
+    fetchSeller();
     fetchProducts()
   },[])
 
@@ -105,7 +126,8 @@ export const AppContextProvider = ({ children }) => {
     searchQuery,
     setSearchQuery,
     getCartAmount,
-    getCartCount
+    getCartCount,
+    axios
   };
 
   return (
