@@ -37,11 +37,38 @@ export const AppContextProvider = ({ children }) => {
       }
   }
 
+  // fetch user auth status user data and cart item
+  const fetchUser = async () =>{
+      try{
+          const {data} = await axios.get('/api/user/is-auth');
+          if(data.success)
+          {
+            setUser(data.user)
+            setCartItems(data.user.cartItems)
+          }
+      }catch(error)
+      {
+          setUser(null)
+      }
+
+  }
+
   const fetchProducts= async ()=>{
-    setProducts(dummyProducts)
+      try{
+            const {data} = await axios.get('/api/product/list')
+            if(data.success){
+              setProducts(data.products)
+            }else{
+              toast.error(data.messsage)
+            }
+      }catch(error)
+      {
+          toast.error(error.messsage)
+      }
   }
 
   useEffect(()=>{
+    fetchUser()
     fetchSeller();
     fetchProducts()
   },[])
@@ -109,6 +136,25 @@ export const AppContextProvider = ({ children }) => {
              setCartItems(cartData);
 
   }
+
+  useEffect(() => {
+    const updateCart = async () => {
+        try {
+            // Sends the cart to the backend to be saved in the User model
+            await axios.post('/api/cart/update', { cartItems }); 
+        } catch (error) {
+            if (user) toast.error(error.message);
+        }
+    }
+
+    // THE FIX: Only sync if a user exists AND the cart is NOT empty.
+    // This stops the initial {} from overwriting your DB on refresh.
+    if (user && Object.keys(cartItems).length > 0) {
+        updateCart();
+    }
+}, [cartItems, user]);
+
+
   const value = {
     navigate,
     user,
@@ -127,7 +173,8 @@ export const AppContextProvider = ({ children }) => {
     setSearchQuery,
     getCartAmount,
     getCartCount,
-    axios
+    axios,
+    fetchProducts
   };
 
   return (
