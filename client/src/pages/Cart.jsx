@@ -5,7 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const Cart = () => {
-    const {products,currency,cartItems,removeFromCart,getCartCount,updateCartItem,navigate,getCartAmount,axios,user}=useAppContext();
+    const {products,currency,cartItems,removeFromCart,getCartCount,updateCartItem,navigate,getCartAmount,axios,user,setCartItems}=useAppContext();
 
     const [cartArray,setCartArray]=useState([])
     const [addresses,setAddresses]=useState([])
@@ -45,7 +45,36 @@ const Cart = () => {
     }
     
     const placeOrder = async ()=>{
+            try{
+                    if(!selectedAdress)
+                    {
+                        return toast.error("Please select an address")
+                    }
 
+                    if(paymentOption === "COD")
+                    {
+                        const {data} =await axios.post('/api/order/cod',{
+                            userId: user._id,
+                            items: cartArray.map(item=>({
+                                product: item._id,
+                                quantity:item.quantity
+                            })),
+                            address:selectedAdress._id
+                        })
+                        if(data.success)
+                        {
+                            toast.success(data.message)
+                            setCartItems({})
+                            navigate('/my-orders')
+                        }
+                        else{
+                            toast.error(data.message)
+                        }
+                    }
+            }catch(error)
+            {
+                    toast.error(error.message)
+            }
     }
     useEffect(()=>{
         if(products.length>0  && cartItems)

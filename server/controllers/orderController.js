@@ -1,3 +1,7 @@
+import Product from "../models/Product.js"
+import Order from "../models/Order.js"
+
+
 // place order cod
 
 export const placeOrderCod = async (req, res) => { 
@@ -25,7 +29,7 @@ export const placeOrderCod = async (req, res) => {
 
 export const getUsersOrders = async (req,res) =>{
     try{
-        const {userId} = req.body;
+        const userId = req.userId;
         const orders = await Order.find({
             userId,
             $or: [{paymentType: "COD",},{isPaid: true}]
