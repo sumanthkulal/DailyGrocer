@@ -111,7 +111,7 @@ export const stripeWebHooks = async (request,response) =>{
                 process.env.STRIPE_WEBHOOK_SECRET
             )
      }catch(error){
-            response.status(400).send(`Webhook error: ${error.message}`)
+            return response.status(400).send(`Webhook error: ${error.message}`)
      }
 
      switch(event.type)
@@ -126,7 +126,7 @@ export const stripeWebHooks = async (request,response) =>{
 
             const {orderId,userId} = session.data[0].metadata;
             await Order.findByIdAndUpdate(orderId,{isPaid:true})
-            await Order.findByIdAndUpdate(orderId, {cartItems: {}})
+            await User.findByIdAndUpdate(userId, {cartData: {}})
             break;
         }
 
@@ -146,10 +146,9 @@ export const stripeWebHooks = async (request,response) =>{
 
         default: 
             console.error(`Unhandled event type ${event.type}`)
-        break;
-
-        response.json({received: true}) 
+        break;   
      }
+     response.json({received: true}) 
     }
 
 
@@ -166,7 +165,7 @@ export const getUsersOrders = async (req,res) =>{
     catch(error)
     {
          console.log(error.message);
-        res.json({sucess: false ,message:error.message})
+        res.json({success: false ,message:error.message})
     }
     
 }
@@ -181,7 +180,7 @@ export const getAllOrders = async (req,res) =>{
     catch(error)
     {
          console.log(error.message);
-        res.json({sucess: false ,message:error.message})
+        res.json({success: false ,message:error.message})
     }
     
 }
