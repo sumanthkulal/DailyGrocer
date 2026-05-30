@@ -209,22 +209,8 @@ npm run dev
 ### 6. Open Application
 
 ```text
-http://localhost:5173](https://dailygrocer-orpin.vercel.app
+https://dailygrocer-orpin.vercel.app
 ```
-
----
-
-## 📸 Screenshots
-
-Add screenshots of:
-
-* Home Page
-* Product Listing
-* Product Details
-* Cart Page
-* Checkout Page
-* Seller Dashboard
-* Orders Management
 
 ---
 
