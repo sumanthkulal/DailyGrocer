@@ -57,21 +57,30 @@ Experience the complete grocery shopping workflow including product browsing, ca
 ## 🏗️ System Architecture
 
 ```text
-React + Vite Frontend
-         │
-         ▼
-Axios API Requests
-         │
-         ▼
-Node.js + Express Backend
-    ├── JWT Authentication
-    ├── Product Management
-    ├── Cart Management
-    ├── Order Management
-    │
-    ├── MongoDB Atlas
-    ├── Cloudinary
-    └── Stripe
++--------------------------------------------------------------------------+
+|                             Frontend Client                              |
+|          Vite Core Runtime Hub  <-->  Stateless Global Context           |
+|                                         |                                |
+|                                         v                                |
+|                               React Router DOM Engine                    |
++--------------------------------------------------------------------------+
+                                     |
+                       Asynchronous HTTP Transports 
+                         (Axios / httpOnly Credentials)
+                                     |
+                                     v
++--------------------------------------------------------------------------+
+|                             Backend API Gateway                          |
+|             Express Route Interceptor  <--> JWT Token Verification       |
++--------------------------------------------------------------------------+
+         |                                |                        |
+   Multer Parsing Buffers        Stripe Session Factory     Mongoose ODM Layers
+         |                                |                        |
+         v                                v                        v
++------------------+             +------------------+     +----------------+
+|  Cloudinary CDN  |             |  Stripe Checkout |     |  MongoDB Atlas |
+|   Asset Vault    |             |  Gateway Panel   |     | Database Core  |
++------------------+             +------------------+     +----------------+
 ```
 
 ---
